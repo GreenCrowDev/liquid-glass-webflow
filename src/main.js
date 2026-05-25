@@ -5,8 +5,8 @@ console.log('Hello from me')
 
 import * as THREE from 'three';
 
-import vertexShader from './shaders/vertex.glsl?raw'
-import fragmentShader from './shaders/fragment.glsl?raw'
+import vertexShader from './shaders/monjori_vertex.glsl?raw'
+import fragmentShader from './shaders/monjori_fragment.glsl?raw'
 
 let camera, scene, renderer;
 
@@ -35,7 +35,11 @@ function init() {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true
+    });
+    renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animate);
