@@ -31,10 +31,13 @@ function init() {
     bgTexture.wrapT = THREE.ClampToEdgeWrapping;
 
     uniforms = {
-        uTime: { value: 1.0 },
+        uTime: { value: 0.0 },
         uBackground: { value: bgTexture },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        uMouse: { value: new THREE.Vector2(window.innerWidth / 2, window.innerHeight / 2) } // Start center
+        // 1. Pass your background asset's real pixel size (e.g., 1920x1080)
+        uBgResolution: { value: new THREE.Vector2(1920, 1080) }, 
+        // 2. Tracks scroll progress normalized between 0.0 and 1.0
+        uProgress: { value: 0.0 } 
     };
 
     const material = new THREE.ShaderMaterial( {
@@ -58,10 +61,13 @@ function init() {
     container.appendChild(renderer.domElement);
 
     window.addEventListener('resize', onWindowResize);
-    window.addEventListener('mousemove', (e) => {
-        // This feeds pure pixel space values directly to the shader (matching how gl_FragCoord calculates)
-        uniforms.uMouse.value.x = e.clientX;
-        uniforms.uMouse.value.y = window.innerHeight - e.clientY; // Invert Y for WebGL coordinates
+    window.addEventListener('scroll', () => {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (maxScroll <= 0) return;
+        
+        // Track percentage scrolled from 0.0 to 1.0
+        const scrollPercent = window.scrollY / maxScroll;
+        uniforms.uProgress.value = scrollPercent;
     });
 }
 
