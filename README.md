@@ -1,3 +1,9 @@
+## Libraries
+
+- [liquidGL](https://github.com/naughtyduk/liquidGL)
+
+## Guide
+
 ```
 docker pull node:24-slim
 

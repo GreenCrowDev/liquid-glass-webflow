@@ -10,10 +10,26 @@
     body {
         margin: 0;
         padding: 0;
-        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364, #ff007f, #7928ca);
+        background:
+          linear-gradient(
+              135deg,
+              rgba(15,32,39,0.7),
+              rgba(32,58,67,0.7),
+              rgba(44,83,100,0.7),
+              rgba(255,0,127,0.4),
+              rgba(121,40,202,0.5)
+          ),
+          url('./assets/img/pexels-egorkomarov-13219418.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         background-attachment: fixed;
         min-height: 100vh;
         font-family: sans-serif;
+    }
+
+    .scroll-space {
+      height: 100vh;
     }
 
     .text-container {
@@ -38,21 +54,46 @@
         width: 100%;
         height: 100%;
         position: relative;
-        border-radius: 24px;
+        border-radius: 8px;
+    }
+
+    .curtains {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      z-index: 10;
+    }
+
+    .col {
+      flex: 1;
+      height: 100vh;
     }
     </style>
   </head>
   <body>
-
-    <div class="follow-cursor">    
-        <div class="liquidGL">
-            <div class="content" style="position: relative; z-index: 3; padding: 20px; color: white; text-align: center;">
-                </div>
-        </div>
+    
+    <div class="curtains">
+      <div class="col">
+        <div class="liquidGL"></div>
+      </div>
+      <div class="col">
+        <div class="liquidGL"></div>
+      </div>
+      <div class="col">
+        <div class="liquidGL"></div>
+      </div>
+      <div class="col">
+        <div class="liquidGL"></div>
+      </div>
+      <div class="col">
+        <div class="liquidGL"></div>
+      </div>
     </div>
-
+    
+    <div class="scroll-space"></div>
+    
     <div class="text-container">
-        <h1>Liquid Glass Tracking Test</h1>
+        <h1>Curtains</h1>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin risus augue, laoreet sed dolor vitae, fringilla semper augue. Mauris tristique nunc nunc, sit amet sollicitudin velit feugiat et. Fusce auctor volutpat consectetur. Ut arcu nisi, mollis eu efficitur egestas, scelerisque et ligula. Vestibulum id tempor risus, et porta libero. Donec interdum vehicula turpis at elementum. Mauris molestie gravida lacus, ut cursus est consectetur ultrices. Etiam sagittis dapibus leo, sed feugiat nunc cursus sit amet.
         </p>
@@ -61,22 +102,26 @@
         </p>
     </div>
 
-    <div style="text-align:center;">
-      <a href="curtains.html" style="padding:10px 16px; background:black; color:white; display:inline-block;">
-        Open Curtains
-      </a>
-    </div>
-
     <script src="/src/liquid_gl/html2canvas.min.js" defer></script>
     <script src="/src/liquid_gl/liquidGL.js" defer></script>
 
     <script>
-        const el = document.querySelector('.follow-cursor');
-        window.addEventListener('mousemove', (e) => {
-            // Using transform or pure top/left coordinate mapping
-            el.style.left = e.clientX + 'px';
-            el.style.top = e.clientY + 'px';
-        });
+      const cols = document.querySelectorAll('.col')
+
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY
+
+        cols.forEach((col, i) => {
+          // distance from center column (2 is center)
+          const center = 2
+          const dist = Math.abs(i - center)
+
+          // outer moves faster
+          const speed = 3 + dist * 1.2
+
+          col.style.transform = `translateY(${-scrollY * speed}px)`
+        })
+      })
     </script>
 
     <script>
@@ -89,14 +134,14 @@
                 target: ".liquidGL", 
                 resolution: 1.5,
                 refraction: 0.05,
-                bevelDepth: 0.15,
+                bevelDepth: 0.4,
                 bevelWidth: 0.1,
-                frost: 0,
+                frost: 8.0,
                 shadow: true, 
                 specular: true, 
                 reveal: "fade", 
                 tilt: false,
-                magnify: 1.05
+                magnify: 1.0
             });
         } else {
             console.error("liquidGL script asset could not be resolved.");
